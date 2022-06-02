@@ -51,6 +51,7 @@ dependencies {
 
     implementation(libs.bundles.androidKtx)
     implementation(libs.bundles.navigationComponent)
+    implementation(libs.splashScreenApi)
     implementation(libs.hiltAndroid)
     kapt(libs.hiltCompiler)
 
