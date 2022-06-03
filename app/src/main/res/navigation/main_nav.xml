@@ -2,8 +2,12 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main_nav.xml">
+    android:id="@+id/main_nav.xml"
+    app:startDestination="@id/fragmentWeather">
 
-
+    <fragment
+        android:id="@+id/fragmentWeather"
+        android:name="com.musala.weatherApp.features.weather.WeatherFragment"
+        tools:layout="@layout/fragment_weather" />
 
 </navigation>

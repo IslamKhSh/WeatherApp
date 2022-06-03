@@ -1,4 +1,4 @@
-package com.musala.weatherApp.ui
+package com.musala.weatherApp.features
 
 
 import android.os.Bundle

@@ -3,6 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.musala.weatherApp">
 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -13,7 +16,7 @@
         android:theme="@style/Theme.WeatherApp.Starting">
 
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".features.MainActivity"
             android:exported="true"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize"

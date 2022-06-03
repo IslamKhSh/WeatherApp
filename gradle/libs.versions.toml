@@ -49,6 +49,8 @@ jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit5Ver
 mockk = "io.mockk:mockk:1.12.4"
 kluentCore = { module = "org.amshove.kluent:kluent", version.ref = "kluentVersion" }
 kluentAndroid = { module = "org.amshove.kluent:kluent-android", version.ref = "kluentVersion" }
+googlePlaces = "com.google.android.libraries.places:places:2.6.0"
+locationService = "com.google.android.gms:play-services-location:19.0.1"
 
 [bundles]
 coroutines = ["coroutinesAndroid", "coroutinesCore"]

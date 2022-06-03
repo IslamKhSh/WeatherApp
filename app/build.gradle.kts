@@ -52,9 +52,11 @@ dependencies {
     implementation(libs.bundles.androidKtx)
     implementation(libs.bundles.navigationComponent)
     implementation(libs.splashScreenApi)
+    implementation(libs.locationService)
     implementation(libs.hiltAndroid)
     kapt(libs.hiltCompiler)
 
+    // testing
     testImplementation(libs.livedataTestHelper)
     testImplementation(libs.bundles.unitTest)
     testImplementation(platform(libs.junit))
