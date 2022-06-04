@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 @Suppress("DSL_SCOPE_VIOLATION", "UnstableApiUsage")
 plugins {
     id(libs.plugins.androidApp.get().pluginId)
@@ -17,6 +19,13 @@ android {
         versionCode = AndroidConfig.versionCode
         versionName = AndroidConfig.versionName
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // you must add your key in local.properties file with key `MAPS_API_KEY`
+        val mapsApiKey = "${gradleLocalProperties(rootDir)["MAPS_API_KEY"]}"
+        manifestPlaceholders["MAPS_API_KEY"] = mapsApiKey
+
+        // init this field in defaultConfig as it doesn't change from build type to another
+        buildConfigField("String", "MAPS_API_KEY", "\"$mapsApiKey\"")
     }
 
     buildTypes {
@@ -53,6 +62,8 @@ dependencies {
     implementation(libs.bundles.navigationComponent)
     implementation(libs.splashScreenApi)
     implementation(libs.locationService)
+    implementation(libs.googlePlaces)
+    implementation(libs.lottie)
     implementation(libs.hiltAndroid)
     kapt(libs.hiltCompiler)
 

@@ -41,6 +41,7 @@ okhttpLogger = { module = "com.squareup.okhttp3:logging-interceptor", version.re
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofitVersion" }
 gsonConverter = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofitVersion" }
 coil = "io.coil-kt:coil:2.1.0"
+lottie = "com.airbnb.android:lottie:5.2.0"
 chuckerDebug = { module = "com.github.chuckerteam.chucker:library", version.ref = "chuckerVersion" }
 chuckerRelease = { module = "com.github.chuckerteam.chucker:library-no-op", version.ref = "chuckerVersion" }
 timber = "com.jakewharton.timber:timber:5.0.1"
