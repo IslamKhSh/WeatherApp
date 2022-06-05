@@ -1,6 +1,5 @@
 package com.musala.weatherApp.data.entities
 
-
 import com.google.gson.annotations.SerializedName
 
 data class WeatherEntity(

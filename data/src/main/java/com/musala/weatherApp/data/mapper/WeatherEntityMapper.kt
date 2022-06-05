@@ -23,6 +23,7 @@ class WeatherEntityMapper @Inject constructor() : Mapper<WeatherEntity, CurrentW
     /**
      * convert wind unit from m/s to km/h
      */
+    @Suppress("Detekt:MagicNumber")
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     fun Double.toKmPerHour() = this * 60 * 60 / 1000
 }

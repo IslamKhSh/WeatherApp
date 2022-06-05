@@ -1,6 +1,5 @@
 package com.musala.weatherApp.data.mapper
 
-
 import com.musala.weatherApp.data.entities.WeatherEntity
 import com.musala.weatherApp.domain.entity.*
 import io.mockk.every
@@ -46,14 +45,10 @@ internal class WeatherEntityMapperTest {
 
     @Test
     fun `given speed in m per s - invoke toKmPerHour - then speed must be km per h`() {
-
         // when
         val result = with(mapper) { WIND_M_S.toKmPerHour() }
 
         // then
         result shouldBeEqualTo WIND_KM_H
     }
-
-
-
 }

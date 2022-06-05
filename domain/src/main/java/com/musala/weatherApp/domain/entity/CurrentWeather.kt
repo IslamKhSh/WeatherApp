@@ -7,7 +7,7 @@ data class CurrentWeather(
     val tempMax: Int,
     val humidity: Int,
     val clouds: Int,
-    val windSpeed : Double,
+    val windSpeed: Double,
     val description: String?,
     val icon: String?
 )

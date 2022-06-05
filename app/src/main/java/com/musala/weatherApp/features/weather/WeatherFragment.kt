@@ -18,6 +18,7 @@ import com.musala.weatherApp.domain.entity.CurrentWeather
 import com.musala.weatherApp.utils.LocationManager
 import com.musala.weatherApp.utils.displayView
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class WeatherFragment :
@@ -109,6 +110,7 @@ class WeatherFragment :
             }
 
             override fun onError(status: Status) {
+                Timber.e("Error selecting place: ${status.statusMessage}")
             }
         })
         initAutocompleteCloseBtn()

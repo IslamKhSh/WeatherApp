@@ -22,7 +22,10 @@ abstract class BaseRecyclerAdapter<M, V : ViewDataBinding>(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<V> {
         val binding = DataBindingUtil.inflate<V>(
-            LayoutInflater.from(parent.context), itemLayoutRes, parent, false
+            LayoutInflater.from(parent.context),
+            itemLayoutRes,
+            parent,
+            false
         )
 
         return BaseViewHolder(binding)

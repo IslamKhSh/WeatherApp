@@ -1,3 +1,5 @@
+@file:Suppress("Detekt:WildcardImport", "Detekt:MagicNumber")
+
 package com.musala.weatherApp.utils
 
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
@@ -32,9 +34,9 @@ sealed class LocationState {
     data class LocationFetchFailure(val exception: Exception) : LocationState()
 
     fun isFetchingLocationFailed() =
-        ((this is LocationPermissionResult) && !isGranted) // if location permission not granted
-                || ((this is LocationProviderResult) && !isOn) // if GPS is off
-                || (this is LocationFetchFailure) // if can't fetch current location
+        ((this is LocationPermissionResult) && !isGranted) || // if location permission not granted
+            ((this is LocationProviderResult) && !isOn) || // if GPS is off
+            (this is LocationFetchFailure) // if can't fetch current location
 }
 
 class LocationManager(context: Context, resultCaller: ActivityResultCaller) {
@@ -50,7 +52,7 @@ class LocationManager(context: Context, resultCaller: ActivityResultCaller) {
             interval = 5000
             fastestInterval = 1000
             numUpdates = 1
-            smallestDisplacement = 170f //170 m = 0.1 mile
+            smallestDisplacement = 170f // 170 m = 0.1 mile
         }
     }
 
@@ -62,12 +64,14 @@ class LocationManager(context: Context, resultCaller: ActivityResultCaller) {
     /**
      * Call this method to get the current location and it handles all the process:
      * - Check for location permission and request it if needed.
-     * - When permission granted it checks on GPS state and ask user to turn it on if needed. see [locationPermissionRequest] initialization.
+     * - When permission granted it checks on GPS state and ask user to turn it on if needed,
+     *   see [locationPermissionRequest] initialization.
      * - When GPS is on start fetching current location. see [locationSettingsRequest] initialization.
      *
      * @return LiveData of [LocationState] which will be updated with the result of every step.
      *
-     * if any failure happens at any step [locationStateLiveData] will be updated and the reset of steps will be canceled.
+     * if any failure happens at any step [locationStateLiveData] will be updated
+     * and the reset of steps will be canceled.
      */
     fun getCurrentLocation(): LiveData<LocationState> {
         locationPermissionRequest?.launch(arrayOf(ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION))
@@ -78,7 +82,6 @@ class LocationManager(context: Context, resultCaller: ActivityResultCaller) {
         if (locationStateLiveData.value == null) getCurrentLocation()
         return locationStateLiveData
     }
-
 
     fun isLocationEnabled(): Boolean {
         val locationManager =
@@ -103,8 +106,9 @@ class LocationManager(context: Context, resultCaller: ActivityResultCaller) {
                 if (it.values.isAllTrue()) { // permission granted
                     checkLocationSettings()
                     locationStateLiveData.value = LocationPermissionResult(true)
-                } else // permission denied
+                } else { // permission denied
                     locationStateLiveData.value = LocationPermissionResult(false)
+                }
             }
     }
 
@@ -117,8 +121,9 @@ class LocationManager(context: Context, resultCaller: ActivityResultCaller) {
                 if (it.resultCode == Activity.RESULT_OK) { // user accept to enable location
                     locationStateLiveData.value = LocationState.LocationProviderResult(true)
                     fetchLocation()
-                } else // user reject
+                } else { // user reject
                     locationStateLiveData.value = LocationState.LocationProviderResult(false)
+                }
             }
     }
 

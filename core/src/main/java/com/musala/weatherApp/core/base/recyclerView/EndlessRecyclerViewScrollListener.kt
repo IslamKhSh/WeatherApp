@@ -43,10 +43,11 @@ abstract class EndlessRecyclerViewScrollListener private constructor() :
     private fun getLastVisibleItem(lastVisibleItemPositions: IntArray): Int {
         var maxSize = 0
         lastVisibleItemPositions.forEachIndexed { index, itemPosition ->
-            if (index == 0)
+            if (index == 0) {
                 maxSize = itemPosition
-            else if (itemPosition > maxSize)
+            } else if (itemPosition > maxSize) {
                 maxSize = itemPosition
+            }
         }
         return maxSize
     }
@@ -78,8 +79,9 @@ abstract class EndlessRecyclerViewScrollListener private constructor() :
         if (totalItemCount < previousTotalItemCount) {
             currentPage = startingPageIndex
             previousTotalItemCount = totalItemCount
-            if (totalItemCount == 0)
+            if (totalItemCount == 0) {
                 loading = true
+            }
         }
 
         // If it’s still loading, we check to see if the dataset count has

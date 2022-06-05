@@ -8,7 +8,6 @@ import java.io.IOException
 import java.net.SocketTimeoutException
 import javax.inject.Inject
 
-
 class ApiErrorManagerImp @Inject constructor() : ApiErrorManager {
 
     override fun catch(throwable: Throwable): Result.Error {

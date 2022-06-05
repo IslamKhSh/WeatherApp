@@ -58,7 +58,6 @@ internal class WeatherViewModelTest {
 
     @Test
     fun `when location permission not granted then state must be FetchLocationFailed`() {
-
         // when
         viewModel.onLocationStateUpdated(LocationState.LocationPermissionResult(false))
 
@@ -68,7 +67,6 @@ internal class WeatherViewModelTest {
 
     @Test
     fun `when location permission granted then no any actions`() {
-
         // when
         viewModel.onLocationStateUpdated(LocationState.LocationPermissionResult(true))
 
@@ -78,7 +76,6 @@ internal class WeatherViewModelTest {
 
     @Test
     fun `when location provider is off then state must be FetchLocationFailed`() {
-
         // when
         viewModel.onLocationStateUpdated(LocationState.LocationProviderResult(false))
 
@@ -88,7 +85,6 @@ internal class WeatherViewModelTest {
 
     @Test
     fun `when location provider is on then no any actions`() {
-
         // when
         viewModel.onLocationStateUpdated(LocationState.LocationProviderResult(true))
 
@@ -98,7 +94,6 @@ internal class WeatherViewModelTest {
 
     @Test
     fun `when failed to fetch location then state must be WaitingSearchInput`() {
-
         // when
         viewModel.onLocationStateUpdated(LocationState.LocationFetchFailure(Exception()))
 
@@ -159,7 +154,6 @@ internal class WeatherViewModelTest {
 
     @Test
     fun `when clear selected place then state must be WaitingSearchInput`() {
-
         // when
         viewModel.clearSelectedPlace()
 
@@ -227,7 +221,6 @@ internal class WeatherViewModelTest {
         action: WeatherAction,
         viewState: WeatherViewState
     ) {
-
         // when
         viewModel.sendAction(action)
 
@@ -245,14 +238,17 @@ internal class WeatherViewModelTest {
             return Stream.of(
                 arguments(OnFetchLocationError, WaitingSearchInput),
                 arguments(
-                    OnPlaceSelected(cityName, latLng), FetchingPlaceWeather(cityName, latLng)
+                    OnPlaceSelected(cityName, latLng),
+                    FetchingPlaceWeather(cityName, latLng)
                 ),
                 arguments(OnClearSelectedPlace, WaitingSearchInput),
                 arguments(
-                    OnApiError(cityName, latLng), FetchingCurrentWeatherError(cityName, latLng)
+                    OnApiError(cityName, latLng),
+                    FetchingCurrentWeatherError(cityName, latLng)
                 ),
                 arguments(
-                    OnConnectionError(cityName, latLng), InternetConnectionError(cityName, latLng)
+                    OnConnectionError(cityName, latLng),
+                    InternetConnectionError(cityName, latLng)
                 ),
                 arguments(
                     OnFetchWeatherSuccessfully(cityName, currentWeatherFixture),
@@ -261,5 +257,4 @@ internal class WeatherViewModelTest {
             )
         }
     }
-
 }

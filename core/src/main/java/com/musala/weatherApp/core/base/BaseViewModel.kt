@@ -6,13 +6,7 @@ import com.musala.weatherApp.core.BuildConfig
 import com.musala.weatherApp.core.base.states.BaseAction
 import com.musala.weatherApp.core.base.states.BaseViewState
 import com.musala.weatherApp.core.base.states.StateTimeTravelDebugger
-import com.musala.weatherApp.core.di.DefaultDispatcher
-import com.musala.weatherApp.core.di.IoDispatcher
-import com.musala.weatherApp.core.di.MainDispatcher
 import com.musala.weatherApp.core.extensions.asLiveData
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import javax.inject.Inject
 import kotlin.properties.Delegates
 
 abstract class BaseViewModel<ViewState : BaseViewState, ViewAction : BaseAction>(initialState: ViewState) :

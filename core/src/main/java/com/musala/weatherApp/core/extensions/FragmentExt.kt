@@ -1,10 +1,10 @@
 package com.musala.weatherApp.core.extensions
 
-import com.musala.weatherApp.core.R
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavDirections
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
+import com.musala.weatherApp.core.R
 import timber.log.Timber
 
 /**

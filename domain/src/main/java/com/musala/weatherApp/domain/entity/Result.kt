@@ -1,8 +1,7 @@
 package com.musala.weatherApp.domain.entity
 
-import com.musala.weatherApp.domain.entity.Result.Success
 import com.musala.weatherApp.domain.entity.Result.Error
-
+import com.musala.weatherApp.domain.entity.Result.Success
 
 /**
  * A generic class that holds a value with its loading status.

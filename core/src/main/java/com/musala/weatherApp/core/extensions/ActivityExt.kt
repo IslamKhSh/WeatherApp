@@ -17,8 +17,9 @@ fun Activity.openActivity(
 ) {
     startActivity(Intent(this, targetActivity))
 
-    if (finishCurrent)
+    if (finishCurrent) {
         finish()
+    }
 }
 
 /**

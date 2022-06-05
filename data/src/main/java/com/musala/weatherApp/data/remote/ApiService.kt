@@ -8,8 +8,8 @@ interface ApiService {
 
     @GET("weather")
     suspend fun getCurrentWeather(
-        @Query("lat") lat : Double,
-        @Query("lon") lng : Double,
-        @Query("units") unit : String = "metric"
-    ) : WeatherEntity
+        @Query("lat") lat: Double,
+        @Query("lon") lng: Double,
+        @Query("units") unit: String = "metric"
+    ): WeatherEntity
 }

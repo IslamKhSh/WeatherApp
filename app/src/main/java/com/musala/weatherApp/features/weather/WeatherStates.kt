@@ -5,7 +5,6 @@ import com.musala.weatherApp.core.base.states.BaseAction
 import com.musala.weatherApp.core.base.states.BaseViewState
 import com.musala.weatherApp.domain.entity.CurrentWeather
 
-
 sealed interface WeatherViewState : BaseViewState {
     object FetchingCurrentLocation : WeatherViewState
     object WaitingSearchInput : WeatherViewState

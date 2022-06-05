@@ -15,7 +15,9 @@ inline fun <reified T : Any> getLiveDataChanges(observer: Observer<T>): List<T> 
 @Suppress("ObjectLiteralToLambda")
 fun <T : Any> createMockedObserver(): Observer<T> {
     val observer = object : Observer<T> {
-        override fun onChanged(t: T?) {}
+        override fun onChanged(t: T?) {
+            println("new value observed: $t")
+        }
     }
     return spyk<Observer<T>>(observer)
 }

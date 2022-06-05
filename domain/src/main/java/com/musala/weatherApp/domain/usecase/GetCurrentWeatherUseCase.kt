@@ -12,5 +12,4 @@ class GetCurrentWeatherUseCase @Inject constructor(
 
     override suspend fun execute(parameters: Pair<Double, Double>): CurrentWeather =
         weatherRepo.getCurrentWeather(parameters.first, parameters.second)
-
 }

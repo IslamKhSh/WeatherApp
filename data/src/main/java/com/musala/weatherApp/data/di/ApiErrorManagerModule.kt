@@ -8,8 +8,11 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 
 /**
- * binds the [ApiErrorManagerImp] the implementation (in data layer) to its abstractions [ApiErrorManager] (in domain layer)
- * so when a use case ask for an abstract [ApiErrorManager] hilt will provide the implementation of it
+ * binds the [ApiErrorManagerImp] the implementation (in data layer)
+ * to its abstractions [ApiErrorManager] (in domain layer).
+ *
+ * so when a use case ask for an abstract [ApiErrorManager]
+ * hilt will provide the implementation of it
  */
 @Module
 @InstallIn(SingletonComponent::class)

@@ -1,11 +1,11 @@
 package com.musala.weatherApp.data.di
 
 import android.content.Context
-import com.musala.weatherApp.data.remote.ApiService
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.musala.weatherApp.data.BuildConfig
 import com.musala.weatherApp.data.BuildConfig.BASE_URL
 import com.musala.weatherApp.data.BuildConfig.WEATHER_API_KEY
+import com.musala.weatherApp.data.remote.ApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -45,7 +45,6 @@ object NetworkModule {
     fun provideChuckerInterceptor(@ApplicationContext context: Context) =
         ChuckerInterceptor.Builder(context).build()
 
-
     /**
      * provide an interceptor to add the api key to all requests as a query parameter
      *
@@ -61,7 +60,6 @@ object NetworkModule {
         chain.proceed(newRequest)
     }
 
-
     /**
      * Provides the okHttp client for networking
      *
@@ -75,7 +73,7 @@ object NetworkModule {
     fun provideOkHttpClient(
         loggingInterceptor: HttpLoggingInterceptor,
         chuckerInterceptor: ChuckerInterceptor,
-        apiKeyInterceptor : Interceptor
+        apiKeyInterceptor: Interceptor
     ): OkHttpClient {
         val client = OkHttpClient.Builder()
 
@@ -86,8 +84,9 @@ object NetworkModule {
             .readTimeout(TIMEOUT_SECONDS, SECONDS) // socket timeout
             .writeTimeout(TIMEOUT_SECONDS, SECONDS) // request timeout
 
-        if (BuildConfig.DEBUG)
+        if (BuildConfig.DEBUG) {
             client.addInterceptor(loggingInterceptor)
+        }
 
         return client.build()
     }

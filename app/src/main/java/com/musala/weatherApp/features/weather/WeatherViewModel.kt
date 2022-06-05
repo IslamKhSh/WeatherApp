@@ -12,7 +12,7 @@ import com.musala.weatherApp.domain.entity.ErrorType
 import com.musala.weatherApp.domain.entity.data
 import com.musala.weatherApp.domain.entity.error
 import com.musala.weatherApp.domain.entity.isSucceeded
-import com.musala.weatherApp.domain.usecase.*
+import com.musala.weatherApp.domain.usecase.GetCurrentWeatherUseCase
 import com.musala.weatherApp.features.weather.WeatherAction.*
 import com.musala.weatherApp.features.weather.WeatherViewState.*
 import com.musala.weatherApp.utils.LocationState
@@ -41,12 +41,13 @@ class WeatherViewModel @Inject constructor(
     }
 
     fun onLocationStateUpdated(locationState: LocationState) {
-        if (locationState.isFetchingLocationFailed())
+        if (locationState.isFetchingLocationFailed()) {
             sendAction(OnFetchLocationError)
-        else if (locationState is LocationState.LocationFetched)
+        } else if (locationState is LocationState.LocationFetched) {
             viewModelScope.launch {
                 onUserLocationFetched(locationState.location)
             }
+        }
     }
 
     @Suppress("BlockingMethodInNonBlockingContext")
@@ -61,7 +62,6 @@ class WeatherViewModel @Inject constructor(
         }
     }
 
-
     fun onPlaceSelected(place: Place) {
         getCurrentWeather(place.name ?: return, place.latLng ?: return)
     }
@@ -74,12 +74,13 @@ class WeatherViewModel @Inject constructor(
         sendAction(OnPlaceSelected(cityName, latLng))
         viewModelScope.launch {
             with(getCurrentWeatherUseCase(latLng.latitude to latLng.longitude)) {
-                if (isSucceeded)
+                if (isSucceeded) {
                     sendAction(OnFetchWeatherSuccessfully(cityName, data))
-                else if (error?.errorType is ErrorType.InternetConnection || error?.errorType is ErrorType.TimeOut)
+                } else if (error?.errorType is ErrorType.InternetConnection || error?.errorType is ErrorType.TimeOut) {
                     sendAction(OnConnectionError(cityName, latLng))
-                else
+                } else {
                     sendAction(OnApiError(cityName, latLng))
+                }
             }
         }
     }

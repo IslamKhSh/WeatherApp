@@ -20,7 +20,7 @@ class App : Application() {
         }
     }
 
-    private fun initGooglePlaces(){
+    private fun initGooglePlaces() {
         Places.initialize(applicationContext, BuildConfig.MAPS_API_KEY)
     }
 }
