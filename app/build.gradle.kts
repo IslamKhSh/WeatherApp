@@ -1,4 +1,6 @@
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+import java.io.FileInputStream
+import java.util.Properties
 
 @Suppress("DSL_SCOPE_VIOLATION", "UnstableApiUsage")
 plugins {
@@ -8,6 +10,11 @@ plugins {
     id(libs.plugins.hilt.get().pluginId)
     alias(libs.plugins.safeArgs)
 }
+
+val credentialsProperties = Properties()
+val credentialsPropertiesFile = File("${project.rootDir}/credentials.properties")
+if (credentialsPropertiesFile.exists())
+    credentialsProperties.load(FileInputStream(credentialsPropertiesFile))
 
 android {
     compileSdk = AndroidConfig.compileSdkVersion
@@ -28,6 +35,16 @@ android {
         buildConfigField("String", "MAPS_API_KEY", "\"$mapsApiKey\"")
     }
 
+    signingConfigs {
+        create("release") {
+            storeFile =
+                file("${rootProject.rootDir}/${credentialsProperties["KEY_STORE_PATH"]}")
+            storePassword = credentialsProperties["PASSWORD"].toString()
+            keyAlias = credentialsProperties["ALIAS"].toString()
+            keyPassword = credentialsProperties["ALIAS_PASSWORD"].toString()
+        }
+    }
+
     buildTypes {
         getByName("debug") {
             isMinifyEnabled = false
@@ -35,11 +52,18 @@ android {
 
         getByName("release") {
             isMinifyEnabled = true
+            isShrinkResources = true
+
+            signingConfig = signingConfigs.getByName("release")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
         }
+    }
+
+    lint {
+        isAbortOnError = false
     }
 
     compileOptions {
