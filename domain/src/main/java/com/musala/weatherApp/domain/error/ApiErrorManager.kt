@@ -1,6 +1,6 @@
 package com.musala.weatherApp.domain.error
 
-import com.musala.weatherApp.domain.usecase.Result
+import com.musala.weatherApp.domain.entity.Result
 
 /**
  * detect the error type and return Result.Error

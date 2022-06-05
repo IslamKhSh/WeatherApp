@@ -1,6 +1,7 @@
-package com.musala.weatherApp.domain.usecase
+package com.musala.weatherApp.domain.entity
 
-import com.musala.weatherApp.domain.usecase.Result.Success
+import com.musala.weatherApp.domain.entity.Result.Success
+import com.musala.weatherApp.domain.entity.Result.Error
 
 
 /**
@@ -38,8 +39,8 @@ sealed class ErrorType {
 val Result<*>.isSucceeded
     get() = this is Success && data != null
 
-val <T> Result<T>.data: T?
-    get() = (this as? Success)?.data
+val <T> Result<T>.data: T
+    get() = (this as Success).data!!
 
 val <T> Result<T>.error: Error?
     get() = this as? Error

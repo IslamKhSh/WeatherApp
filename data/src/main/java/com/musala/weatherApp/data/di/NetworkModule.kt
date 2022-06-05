@@ -5,11 +5,13 @@ import com.musala.weatherApp.data.remote.ApiService
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.musala.weatherApp.data.BuildConfig
 import com.musala.weatherApp.data.BuildConfig.BASE_URL
+import com.musala.weatherApp.data.BuildConfig.WEATHER_API_KEY
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.logging.HttpLoggingInterceptor.Level.BODY
@@ -43,23 +45,43 @@ object NetworkModule {
     fun provideChuckerInterceptor(@ApplicationContext context: Context) =
         ChuckerInterceptor.Builder(context).build()
 
+
+    /**
+     * provide an interceptor to add the api key to all requests as a query parameter
+     *
+     * @return an instance of Interceptor
+     */
+    @Provides
+    @Singleton
+    fun provideApiKeyInterceptor() = Interceptor { chain ->
+        val newRequest = chain.request().newBuilder()
+            .url(chain.request().url.newBuilder().addQueryParameter("appid", WEATHER_API_KEY).build())
+            .build()
+
+        chain.proceed(newRequest)
+    }
+
+
     /**
      * Provides the okHttp client for networking
      *
      * @param loggingInterceptor the okHttp logging interceptor
      * @param chuckerInterceptor the chucker interceptor to help debugging the api requests on device
+     * @param apiKeyInterceptor interceptor to add api key to all requests
      * @return okHttp client instance
      */
     @Provides
     @Singleton
     fun provideOkHttpClient(
         loggingInterceptor: HttpLoggingInterceptor,
-        chuckerInterceptor: ChuckerInterceptor
+        chuckerInterceptor: ChuckerInterceptor,
+        apiKeyInterceptor : Interceptor
     ): OkHttpClient {
         val client = OkHttpClient.Builder()
 
         client
             .addInterceptor(chuckerInterceptor)
+            .addInterceptor(apiKeyInterceptor)
             .connectTimeout(TIMEOUT_SECONDS, SECONDS) // connect timeout
             .readTimeout(TIMEOUT_SECONDS, SECONDS) // socket timeout
             .writeTimeout(TIMEOUT_SECONDS, SECONDS) // request timeout

@@ -71,6 +71,7 @@ dependencies {
     testImplementation(libs.livedataTestHelper)
     testImplementation(libs.bundles.unitTest)
     testImplementation(platform(libs.junit))
+    testImplementation(testFixtures(projects.domain))
 
     implementation(projects.core)
 }

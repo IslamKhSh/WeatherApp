@@ -1,5 +1,6 @@
 package com.musala.weatherApp.domain.usecase
 
+import com.musala.weatherApp.domain.entity.Result
 import com.musala.weatherApp.domain.error.ApiErrorManager
 
 /**

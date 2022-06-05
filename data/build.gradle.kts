@@ -11,18 +11,20 @@ android {
     defaultConfig {
         minSdk = AndroidConfig.minSdkVersion
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "BASE_URL", "\"https://api.openweathermap.org/data/2.5/\"")
+        buildConfigField("String", "WEATHER_API_KEY", "\"4bc2322e1657902987ceb2448c4385a1\"")
+        buildConfigField("String", "WEATHER_ICON_URL", "\"https://openweathermap.org/img/wn/%s@4x.png\"")
     }
 
     buildTypes {
         getByName("debug") {
             isMinifyEnabled = false
-            buildConfigField("String", "BASE_URL", "\"https://api.openweathermap.org/data/3.0/\"")
         }
 
         getByName("release") {
             isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
-            buildConfigField("String", "BASE_URL", "\"https://api.openweathermap.org/data/3.0/\"")
         }
     }
 
@@ -47,6 +49,7 @@ dependencies {
 
     testImplementation(libs.bundles.unitTest)
     testImplementation(platform(libs.junit))
+    testImplementation(testFixtures(projects.domain))
 
     implementation(projects.domain)
 }

@@ -43,8 +43,8 @@ abstract class BaseFragment<DB : ViewDataBinding, VS : BaseViewState, VM : BaseV
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        init()
         observeViewState()
+        init()
     }
 
     private fun initDataBinding(inflater: LayoutInflater, container: ViewGroup?) {

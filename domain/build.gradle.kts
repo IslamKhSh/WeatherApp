@@ -1,6 +1,7 @@
 @Suppress("DSL_SCOPE_VIOLATION", "UnstableApiUsage")
 plugins {
     `java-library`
+    `java-test-fixtures`
     id(libs.plugins.kotlinJVM.get().pluginId)
     id(libs.plugins.kotlinKapt.get().pluginId)
 }

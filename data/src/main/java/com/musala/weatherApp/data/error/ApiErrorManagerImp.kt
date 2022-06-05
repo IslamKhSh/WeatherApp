@@ -1,7 +1,7 @@
 package com.musala.weatherApp.data.error
 
-import com.musala.weatherApp.domain.usecase.ErrorType
-import com.musala.weatherApp.domain.usecase.Result
+import com.musala.weatherApp.domain.entity.ErrorType
+import com.musala.weatherApp.domain.entity.Result
 import com.musala.weatherApp.domain.error.ApiErrorManager
 import retrofit2.HttpException
 import java.io.IOException

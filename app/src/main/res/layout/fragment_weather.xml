@@ -11,6 +11,10 @@
         <variable
             name="image"
             type="android.graphics.drawable.Drawable" />
+
+        <variable
+            name="weather"
+            type="com.musala.weatherApp.domain.entity.CurrentWeather" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -55,6 +59,17 @@
                 app:lottie_autoPlay="true"
                 app:lottie_loop="true"
                 app:lottie_rawRes="@raw/loading_animation" />
+
+            <include
+                android:id="@+id/viewError"
+                layout="@layout/view_error"
+                app:image="@{image}"
+                app:text="@{text}" />
+
+            <include
+                android:id="@+id/currentWeatherView"
+                layout="@layout/view_current_weather"
+                app:weather="@{weather}" />
 
         </ViewFlipper>
 

@@ -5,17 +5,20 @@ import android.location.Geocoder
 import android.location.Location
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.model.Place
+import com.musala.weatherApp.domain.entity.ErrorType
+import com.musala.weatherApp.domain.entity.Result
+import com.musala.weatherApp.domain.entity.currentWeatherFixture
+import com.musala.weatherApp.domain.usecase.GetCurrentWeatherUseCase
 import com.musala.weatherApp.extenions.CoroutinesTestExtension
 import com.musala.weatherApp.extenions.InstantTaskExecutorExtension
-import com.musala.weatherApp.features.weather.WeatherAction.OnPlaceSelected
-import com.musala.weatherApp.features.weather.WeatherViewState.FetchingCurrentLocation
-import com.musala.weatherApp.features.weather.WeatherViewState.FetchingPlaceWeather
+import com.musala.weatherApp.features.weather.WeatherAction.*
+import com.musala.weatherApp.features.weather.WeatherViewState.*
+import com.musala.weatherApp.testUtils.createMockedObserver
+import com.musala.weatherApp.testUtils.getLiveDataChanges
 import com.musala.weatherApp.utils.LocationState
-import io.mockk.every
+import io.mockk.*
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
-import io.mockk.mockk
-import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -38,10 +41,19 @@ internal class WeatherViewModelTest {
     @MockK
     private lateinit var geocoder: Geocoder
 
+    @MockK
+    private lateinit var useCase: GetCurrentWeatherUseCase
+
+    private val stateObserver = createMockedObserver<WeatherViewState>()
+
+    private val cityName = "Cairo"
+    private val latLng = LatLng(10.0, 20.0)
+
     @BeforeEach
     fun setup() {
         /** mainDispatcher will be set to `TestDispatcher`, see [CoroutinesTestExtension] **/
-        viewModel = WeatherViewModel(Dispatchers.Main, Dispatchers.Main, geocoder)
+        viewModel = WeatherViewModel(Dispatchers.Main, Dispatchers.Main, geocoder, useCase)
+        viewModel.viewState.observeForever(stateObserver)
     }
 
     @Test
@@ -51,7 +63,7 @@ internal class WeatherViewModelTest {
         viewModel.onLocationStateUpdated(LocationState.LocationPermissionResult(false))
 
         // then
-        viewModel.viewState.value shouldBeEqualTo WeatherViewState.FetchLocationFailed
+        viewModel.viewState.value shouldBeEqualTo WaitingSearchInput
     }
 
     @Test
@@ -71,7 +83,7 @@ internal class WeatherViewModelTest {
         viewModel.onLocationStateUpdated(LocationState.LocationProviderResult(false))
 
         // then
-        viewModel.viewState.value shouldBeEqualTo WeatherViewState.FetchLocationFailed
+        viewModel.viewState.value shouldBeEqualTo WaitingSearchInput
     }
 
     @Test
@@ -85,28 +97,27 @@ internal class WeatherViewModelTest {
     }
 
     @Test
-    fun `when failed to fetch location then state must be FetchLocationFailed`() {
+    fun `when failed to fetch location then state must be WaitingSearchInput`() {
 
         // when
         viewModel.onLocationStateUpdated(LocationState.LocationFetchFailure(Exception()))
 
         // then
-        viewModel.viewState.value shouldBeEqualTo WeatherViewState.FetchLocationFailed
+        viewModel.viewState.value shouldBeEqualTo WaitingSearchInput
     }
 
     @Test
-    fun `when fetch location then location must be geocoded and state must be FetchingPlaceWeather`() {
+    fun `when fetch location, location must be geocoded, weather must be fetched and state must be changed`() {
         // given
-        val lat = 10.0
-        val lng = 20.0
         val location = mockk<Location>()
-        every { location.latitude } returns lat
-        every { location.longitude } returns lng
+        every { location.latitude } returns latLng.latitude
+        every { location.longitude } returns latLng.longitude
 
-        val cityName = "Cairo"
         val address = mockk<Address>()
         every { address.locality } returns cityName
-        every { geocoder.getFromLocation(lat, lng, 1) } returns listOf(address)
+        every { geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1) } returns listOf(address)
+
+        coEvery { useCase(any()) } returns Result.Success(currentWeatherFixture)
 
         // when
         runTest {
@@ -114,24 +125,100 @@ internal class WeatherViewModelTest {
         }
 
         // then
-        verify { geocoder.getFromLocation(lat, lng, 1) }
-        viewModel.viewState.value shouldBeEqualTo FetchingPlaceWeather(cityName, LatLng(lat, lng))
+        verify { geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1) }
+        coVerify { useCase(any()) }
+        getLiveDataChanges(stateObserver) shouldBeEqualTo listOf(
+            FetchingCurrentLocation,
+            FetchingPlaceWeather(cityName, latLng),
+            DisplayCurrentWeather(cityName, currentWeatherFixture)
+        )
     }
 
     @Test
-    fun `when select place then state must be FetchingPlaceWeather`() {
+    fun `when select place then weather must be fetched and state must be changed`() {
         // given
-        val cityName = "Cairo"
-        val latLng = LatLng(10.0, 20.0)
         val place = mockk<Place>()
         every { place.name } returns cityName
         every { place.latLng } returns latLng
 
+        coEvery { useCase(any()) } returns Result.Success(currentWeatherFixture)
+
         // when
-        viewModel.onPlaceSelected(place)
+        runTest {
+            viewModel.onPlaceSelected(place)
+        }
 
         // then
-        viewModel.viewState.value shouldBeEqualTo FetchingPlaceWeather(cityName, latLng)
+        coVerify { useCase(any()) }
+        getLiveDataChanges(stateObserver) shouldBeEqualTo listOf(
+            FetchingCurrentLocation,
+            FetchingPlaceWeather(cityName, latLng),
+            DisplayCurrentWeather(cityName, currentWeatherFixture)
+        )
+    }
+
+    @Test
+    fun `when clear selected place then state must be WaitingSearchInput`() {
+
+        // when
+        viewModel.clearSelectedPlace()
+
+        // then
+        viewModel.viewState.value shouldBeEqualTo WaitingSearchInput
+    }
+
+    @Test
+    fun `when getCurrentWeather success then state must be changed`() {
+        // given
+        coEvery { useCase(any()) } returns Result.Success(currentWeatherFixture)
+
+        // when
+        runTest {
+            viewModel.getCurrentWeather(cityName, latLng)
+        }
+
+        // then
+        getLiveDataChanges(stateObserver) shouldBeEqualTo listOf(
+            FetchingCurrentLocation,
+            FetchingPlaceWeather(cityName, latLng),
+            DisplayCurrentWeather(cityName, currentWeatherFixture)
+        )
+    }
+
+    @Test
+    fun `when getCurrentWeather with network error then state must be changed`() {
+        // given
+        coEvery { useCase(any()) } returns Result.Error(ErrorType.InternetConnection)
+
+        // when
+        runTest {
+            viewModel.getCurrentWeather(cityName, latLng)
+        }
+
+        // then
+        getLiveDataChanges(stateObserver) shouldBeEqualTo listOf(
+            FetchingCurrentLocation,
+            FetchingPlaceWeather(cityName, latLng),
+            InternetConnectionError(cityName, latLng)
+        )
+    }
+
+    @Test
+    fun `when getCurrentWeather with api error then state must be changed`() {
+        // given
+        coEvery { useCase(any()) } returns Result.Error(ErrorType.Other)
+
+        // when
+        runTest {
+            viewModel.getCurrentWeather(cityName, latLng)
+        }
+
+        // then
+        getLiveDataChanges(stateObserver) shouldBeEqualTo listOf(
+            FetchingCurrentLocation,
+            FetchingPlaceWeather(cityName, latLng),
+            FetchingCurrentWeatherError(cityName, latLng)
+        )
     }
 
     @ParameterizedTest
@@ -156,8 +243,21 @@ internal class WeatherViewModelTest {
             val latLng = LatLng(10.0, 20.0)
 
             return Stream.of(
-                arguments(WeatherAction.OnFetchLocationError, WeatherViewState.FetchLocationFailed),
-                arguments(OnPlaceSelected(cityName, latLng), FetchingPlaceWeather(cityName, latLng))
+                arguments(OnFetchLocationError, WaitingSearchInput),
+                arguments(
+                    OnPlaceSelected(cityName, latLng), FetchingPlaceWeather(cityName, latLng)
+                ),
+                arguments(OnClearSelectedPlace, WaitingSearchInput),
+                arguments(
+                    OnApiError(cityName, latLng), FetchingCurrentWeatherError(cityName, latLng)
+                ),
+                arguments(
+                    OnConnectionError(cityName, latLng), InternetConnectionError(cityName, latLng)
+                ),
+                arguments(
+                    OnFetchWeatherSuccessfully(cityName, currentWeatherFixture),
+                    DisplayCurrentWeather(cityName, currentWeatherFixture)
+                )
             )
         }
     }
