@@ -34,7 +34,6 @@ hiltCore = { module = "com.google.dagger:hilt-core", version.ref = "daggerHiltVe
 hiltCompiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "daggerHiltVersion" }
 constraintLayout = "androidx.constraintlayout:constraintlayout:2.1.4"
 materialComponent = "com.google.android.material:material:1.6.1"
-recyclerview = "androidx.recyclerview:recyclerview:1.2.1"
 splashScreenApi = "androidx.core:core-splashscreen:1.0.0-rc01"
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttpVersion" }
 okhttpLogger = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttpVersion" }
@@ -58,7 +57,7 @@ coroutines = ["coroutinesAndroid", "coroutinesCore"]
 lifecycle = ["lifecycle", "lifecycleCommon", "liveData", "viewModel"]
 navigationComponent = ["navigationComponentFragment", "navigationComponentUi"]
 androidKtx = ["activityKtx", "appcompat", "coreKtx", "fragmentKtx"]
-basicUi = ["constraintLayout", "materialComponent", "recyclerview"]
+basicUi = ["constraintLayout", "materialComponent"]
 retrofit = ["gsonConverter", "okhttp", "okhttpLogger", "retrofit"]
 unitTest = ["coroutinesTest", "jupiter", "kluentCore", "kotlinTestJunit", "mockk"]
 

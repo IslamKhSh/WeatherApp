@@ -30,17 +30,4 @@ object BindingAdapters {
             diskCachePolicy(CachePolicy.ENABLED)
         }
     }
-
-    /**
-     * Extension function to set the visibility of the view to [View.VISIBLE] or [View.GONE].
-     *
-     * @receiver [View]
-     * @param show Boolean true if target to set visibility to [View.VISIBLE], false to set visibility to [View.GONE]
-     *
-     */
-    @JvmStatic
-    @BindingAdapter("isVisible")
-    fun View.showHide(show: Boolean) {
-        visibility = if (show) View.VISIBLE else View.GONE
-    }
 }
