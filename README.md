@@ -1,5 +1,5 @@
 # Weather App
-Musala Soft Android test
+Android Weather app using [OpenWeather Api](https://openweathermap.org/api).
 
 ## Requirements
 - Use Android Studio Chipmunk | 2021.2.1 (latest stable) or newer (unstable channels).
