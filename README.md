@@ -2,7 +2,7 @@
 Musala Soft Android test
 
 ## Requirements
-- Use Android Studio Chipmunk | 2021.2.1 or newer (unstable channels).
+- Use Android Studio Chipmunk | 2021.2.1 (latest stable) or newer (unstable channels).
   Because I use [testFixtures](https://developer.android.com/studio/releases/gradle-plugin#test-fixtures) which is supported in this release.
 - Add your google API key to `local.properties` file `MAPS_API_KEY=YOUR_API_VALUE`
   You can use this [debug](app/debug/app-debug.apk) or [release](app/release/app-release.apk) builds generated with my own restricted API key.
